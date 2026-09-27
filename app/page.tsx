@@ -1,26 +1,12 @@
 import Image from "next/image";
-import { GallerySlider } from "./gallery-slider";
+import { HeroSlideshow } from "./hero-slideshow";
 import { RsvpForm } from "./rsvp-form";
 import { event } from "@/lib/event";
 
 export default function Home() {
   return <main>
     <a className="skip-link" href="#invitation">Skip to invitation details</a>
-    <section className="hero" id="top">
-      <header className="site-nav">
-        <a className="monogram" href="#top" aria-label="Imaya and Shehan wedding invitation">I <i>&amp;</i> S</a>
-        <nav aria-label="Invitation navigation"><a href="#the-day">The day</a><a href="#venue">Venue</a><a href="#rsvp">RSVP</a></nav>
-      </header>
-      <div className="hero-layout">
-        <div className="hero-copy">
-          <p className="hero-date">16 July 2027</p>
-          <h1><span>Imaya</span><span><i>&amp;</i> Shehan</span></h1>
-          <p className="hero-summary">Request the pleasure of your company for an evening of celebration in Colombo.</p>
-          <a className="text-link" href="#venue">View the venue</a>
-        </div>
-        <div className="hero-photo"><Image src="/images/ring-closeup.jpeg" alt="Imaya's sapphire engagement ring as the couple hold hands" fill priority sizes="(max-width: 760px) 100vw, 56vw" /></div>
-      </div>
-    </section>
+    <HeroSlideshow />
 
     <section className="opening" id="invitation">
       <div className="opening-image"><Image src="/images/arch-kiss.jpeg" alt="Imaya and Shehan kissing beneath their flower arch" fill sizes="(max-width: 760px) 100vw, 48vw" /></div>
@@ -38,8 +24,6 @@ export default function Home() {
         {event.timeline.map(([time, title, description]) => <li key={time}><time>{time}</time><div><h3>{title}</h3><p>{description}</p></div></li>)}
       </ol>
     </section>
-
-    <GallerySlider />
 
     <section className="venue" id="venue">
       <div className="venue-copy"><p className="venue-name">Cinnamon Life at City of Dreams</p><h2>An evening in the <i>heart of Colombo.</i></h2><address>{event.city}</address><a className="text-link" href={event.mapUrl} target="_blank" rel="noreferrer">Open Google Maps</a></div>
