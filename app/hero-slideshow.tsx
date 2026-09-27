@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const slides = [
   {
@@ -33,6 +33,8 @@ const slides = [
 export function HeroSlideshow() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const music = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -44,7 +46,21 @@ export function HeroSlideshow() {
     setActive((index + slides.length) % slides.length);
   };
 
+  const toggleMusic = () => {
+    const audio = music.current;
+    if (!audio) return;
+    if (audio.paused) {
+      audio.volume = 0.3;
+      audio.play().then(() => setMusicPlaying(true)).catch(() => setMusicPlaying(false));
+    }
+    else {
+      audio.pause();
+      setMusicPlaying(false);
+    }
+  };
+
   return <section className="hero" id="top" aria-label="Imaya and Shehan wedding invitation">
+    <audio ref={music} src="/bgm/alubgm.mp3" loop preload="metadata" />
     <div className="hero-slides" aria-live="polite">
       {slides.map((slide, index) => <div className={`hero-slide${index === active ? " is-active" : ""}`} key={slide.src} aria-hidden={index !== active}>
         <Image src={slide.src} alt={index === active ? slide.alt : ""} fill priority={index === 0} sizes="100vw" style={{ objectPosition: slide.position }} />
@@ -71,6 +87,7 @@ export function HeroSlideshow() {
         <span aria-label={`Photograph ${active + 1} of ${slides.length}`}>{String(active + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span>
         <button type="button" onClick={() => show(active + 1)} aria-label="Show next photograph">→</button>
         <button className="hero-pause" type="button" onClick={() => setPaused((current) => !current)}>{paused ? "Play" : "Pause"}</button>
+        <button className="hero-pause" type="button" onClick={toggleMusic} aria-label={musicPlaying ? "Pause music" : "Play music"}>{musicPlaying ? "Pause music" : "Play music"}</button>
       </div>
     </div>
   </section>;
