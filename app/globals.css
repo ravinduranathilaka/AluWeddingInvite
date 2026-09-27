@@ -23,6 +23,23 @@ button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation
 .skip-link { position: fixed; z-index: 10; top: 1rem; left: 1rem; transform: translateY(-150%); padding: .7rem .85rem; background: var(--ink); color: var(--canvas); font-size: .8rem; }
 .skip-link:focus { transform: translateY(0); }
 
+.invitation-gate { position: fixed; z-index: 20; inset: 0; overflow: hidden; border: 0; padding: env(safe-area-inset-top) 1.5rem env(safe-area-inset-bottom); background: #4a354f; color: #fff; cursor: pointer; isolation: isolate; }
+.invitation-gate::before { position: absolute; z-index: -3; inset: 0; background: linear-gradient(135deg, #3d2b43, #66516c 55%, #9e819a); content: ""; }
+.invitation-gate-copy { position: absolute; z-index: 2; top: 50%; left: 50%; display: grid; gap: .7rem; transform: translate(-50%, -50%); width: max-content; text-align: center; text-shadow: 0 2px 18px rgb(31 17 38 / .35); transition: opacity .35s ease; }
+.invitation-gate-copy small { font-size: .68rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; }
+.invitation-gate-copy strong { font-family: var(--display); font-size: clamp(2.5rem, 7vw, 5.25rem); font-weight: 400; letter-spacing: -.055em; line-height: .95; }
+.cloud-bank { position: absolute; z-index: -1; top: -12%; width: 70%; height: 125%; opacity: .98; background: radial-gradient(ellipse 32% 23% at 14% 19%, #fff 0 45%, transparent 70%), radial-gradient(ellipse 34% 20% at 48% 9%, #f7f2f7 0 50%, transparent 72%), radial-gradient(ellipse 42% 27% at 70% 36%, #eee4ee 0 49%, transparent 72%), radial-gradient(ellipse 36% 25% at 20% 56%, #fff 0 48%, transparent 72%), radial-gradient(ellipse 43% 30% at 70% 75%, #efe5ef 0 50%, transparent 73%), radial-gradient(ellipse 38% 28% at 25% 92%, #fff 0 48%, transparent 72%); filter: blur(10px); transform: translateX(0); transition: transform 1.35s cubic-bezier(.72, 0, .22, 1), opacity 1.1s ease; will-change: transform, opacity; }
+.cloud-bank-left { left: -22%; }
+.cloud-bank-right { right: -22%; transform: scaleX(-1); }
+.cloud-bank-far { z-index: -2; opacity: .55; filter: blur(22px); transition-duration: 1.55s; }
+.cloud-bank-left.cloud-bank-far { left: -28%; transform: translateX(5%); }
+.cloud-bank-right.cloud-bank-far { right: -28%; transform: scaleX(-1) translateX(5%); }
+.invitation-gate.is-opening .cloud-bank-left { transform: translateX(-86%); opacity: .76; }
+.invitation-gate.is-opening .cloud-bank-right { transform: scaleX(-1) translateX(-86%); opacity: .76; }
+.invitation-gate.is-opening .cloud-bank-left.cloud-bank-far { transform: translateX(-74%); }
+.invitation-gate.is-opening .cloud-bank-right.cloud-bank-far { transform: scaleX(-1) translateX(-74%); }
+.invitation-gate.is-opening .invitation-gate-copy { opacity: 0; }
+
 .hero { position: relative; display: grid; min-height: 100svh; overflow: hidden; padding: 1.25rem clamp(1.35rem, 4vw, 4rem) clamp(1.35rem, 3vw, 3rem); color: #fff; isolation: isolate; }
 .hero-slides, .hero-slide, .hero-wash { position: absolute; inset: 0; }
 .hero-slides { z-index: -2; background: #2d1b2f; }

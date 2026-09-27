@@ -34,6 +34,8 @@ export function HeroSlideshow() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
+  const [openingInvitation, setOpeningInvitation] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(true);
   const music = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
@@ -42,23 +44,22 @@ export function HeroSlideshow() {
     return () => window.clearInterval(timer);
   }, [paused]);
 
-  useEffect(() => {
-    const startMusic = () => {
-      const audio = music.current;
-      if (!audio || !audio.paused) return;
-      audio.volume = 0.3;
-      audio.play().catch(() => undefined);
-    };
-    window.addEventListener("pointerdown", startMusic, { once: true });
-    window.addEventListener("keydown", startMusic, { once: true });
-    return () => {
-      window.removeEventListener("pointerdown", startMusic);
-      window.removeEventListener("keydown", startMusic);
-    };
-  }, []);
-
   const show = (index: number) => {
     setActive((index + slides.length) % slides.length);
+  };
+
+  const openInvitation = () => {
+    const audio = music.current;
+    if (audio) {
+      audio.volume = 0.3;
+      audio.play().catch(() => undefined);
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShowWelcome(false);
+      return;
+    }
+    setOpeningInvitation(true);
+    window.setTimeout(() => setShowWelcome(false), 1450);
   };
 
   const toggleMusic = () => {
@@ -76,6 +77,13 @@ export function HeroSlideshow() {
 
   return <section className="hero" id="top" aria-label="Imaya and Shehan wedding invitation">
     <audio ref={music} src="/bgm/alubgm.mp3" loop preload="auto" onPlay={() => setMusicPlaying(true)} onPause={() => setMusicPlaying(false)} />
+    {showWelcome && <button className={`invitation-gate${openingInvitation ? " is-opening" : ""}`} type="button" onClick={openInvitation} aria-label="Open Imaya and Shehan's wedding invitation">
+      <span className="cloud-bank cloud-bank-left" aria-hidden="true" />
+      <span className="cloud-bank cloud-bank-right" aria-hidden="true" />
+      <span className="cloud-bank cloud-bank-left cloud-bank-far" aria-hidden="true" />
+      <span className="cloud-bank cloud-bank-right cloud-bank-far" aria-hidden="true" />
+      <span className="invitation-gate-copy"><small>Imaya &amp; Shehan</small><strong>Click to Open</strong></span>
+    </button>}
     <div className="hero-slides" aria-live="polite">
       {slides.map((slide, index) => <div className={`hero-slide${index === active ? " is-active" : ""}`} key={slide.src} aria-hidden={index !== active}>
         <Image src={slide.src} alt={index === active ? slide.alt : ""} fill priority={index === 0} sizes="100vw" style={{ objectPosition: slide.position }} />
