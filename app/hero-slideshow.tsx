@@ -42,6 +42,21 @@ export function HeroSlideshow() {
     return () => window.clearInterval(timer);
   }, [paused]);
 
+  useEffect(() => {
+    const startMusic = () => {
+      const audio = music.current;
+      if (!audio || !audio.paused) return;
+      audio.volume = 0.3;
+      audio.play().catch(() => undefined);
+    };
+    window.addEventListener("pointerdown", startMusic, { once: true });
+    window.addEventListener("keydown", startMusic, { once: true });
+    return () => {
+      window.removeEventListener("pointerdown", startMusic);
+      window.removeEventListener("keydown", startMusic);
+    };
+  }, []);
+
   const show = (index: number) => {
     setActive((index + slides.length) % slides.length);
   };
@@ -60,7 +75,7 @@ export function HeroSlideshow() {
   };
 
   return <section className="hero" id="top" aria-label="Imaya and Shehan wedding invitation">
-    <audio ref={music} src="/bgm/alubgm.mp3" loop preload="metadata" />
+    <audio ref={music} src="/bgm/alubgm.mp3" loop preload="auto" onPlay={() => setMusicPlaying(true)} onPause={() => setMusicPlaying(false)} />
     <div className="hero-slides" aria-live="polite">
       {slides.map((slide, index) => <div className={`hero-slide${index === active ? " is-active" : ""}`} key={slide.src} aria-hidden={index !== active}>
         <Image src={slide.src} alt={index === active ? slide.alt : ""} fill priority={index === 0} sizes="100vw" style={{ objectPosition: slide.position }} />
