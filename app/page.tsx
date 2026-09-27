@@ -1,104 +1,56 @@
-"use client";
-
 import Image from "next/image";
-import { useState } from "react";
+import { GallerySlider } from "./gallery-slider";
+import { RsvpForm } from "./rsvp-form";
 import { event } from "@/lib/event";
 
-const gallery = [
-  ["/images/hero-couple.jpeg", "Imaya and Shehan beneath a flower arch"],
-  ["/images/hero-arch.jpeg", "A pink and lavender floral ceremony arch"],
-  ["/images/hero-flowers.jpeg", "Pink flowers arranged in a garden"],
-] as const;
-
-function Mark({ children }: { children: React.ReactNode }) {
-  return <span className="mark" aria-hidden="true">{children}</span>;
-}
-
 export default function Home() {
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [rsvpOpen, setRsvpOpen] = useState(false);
-
-  return (
-    <main>
-      <section className="hero" id="top">
-        <div className="hero-image" aria-hidden="true">
-          <Image src="/images/hero-couple.jpeg" alt="" fill priority sizes="100vw" />
-        </div>
-        <div className="hero-wash" />
-        <header className="hero-nav">
-          <a className="wordmark" href="#top" aria-label="Back to the beginning">I <i>&amp;</i> S</a>
-          <a href="#rsvp">RSVP <span aria-hidden="true">↘</span></a>
-        </header>
+  return <main>
+    <a className="skip-link" href="#invitation">Skip to invitation details</a>
+    <section className="hero" id="top">
+      <header className="site-nav">
+        <a className="monogram" href="#top" aria-label="Imaya and Shehan wedding invitation">I <i>&amp;</i> S</a>
+        <nav aria-label="Invitation navigation"><a href="#the-day">The day</a><a href="#venue">Venue</a><a href="#rsvp">RSVP</a></nav>
+      </header>
+      <div className="hero-layout">
         <div className="hero-copy">
-          <p className="eyebrow">Together with their families</p>
-          <h1><span>Imaya</span><em>&amp;</em><span>Shehan</span></h1>
-          <div className="date-lockup"><span>Friday</span><strong>16</strong><span>July<br />2027</span></div>
-          <a className="hero-scroll" href="#story">Celebrate with us <span aria-hidden="true">↓</span></a>
+          <p className="hero-date">16 July 2027</p>
+          <h1><span>Imaya</span><span><i>&amp;</i> Shehan</span></h1>
+          <p className="hero-summary">Request the pleasure of your company for an evening of celebration in Colombo.</p>
+          <a className="text-link" href="#venue">View the venue</a>
         </div>
-      </section>
+        <div className="hero-photo"><Image src="/images/ring-closeup.jpeg" alt="Imaya's sapphire engagement ring as the couple hold hands" fill priority sizes="(max-width: 760px) 100vw, 56vw" /></div>
+      </div>
+    </section>
 
-      <section className="story section" id="story">
-        <div className="story-photo"><Image src="/images/hero-arch.jpeg" alt="A flower-filled arch ready for a wedding ceremony" fill sizes="(max-width: 760px) 100vw, 45vw" /></div>
-        <div className="story-copy">
-          <p className="eyebrow">A garden beginning</p>
-          <h2>One beautiful day,<br /><i>shared together.</i></h2>
-          <p>We would be delighted to have you with us as we make our promises and begin the next chapter of our story.</p>
-          <div className="initial-seal" aria-label="Placeholder insignia">I <i>&amp;</i> S</div>
-        </div>
-      </section>
+    <section className="opening" id="invitation">
+      <div className="opening-image"><Image src="/images/arch-kiss.jpeg" alt="Imaya and Shehan kissing beneath their flower arch" fill sizes="(max-width: 760px) 100vw, 48vw" /></div>
+      <div className="opening-copy">
+        <p className="intro-line">Together with their families</p>
+        <h2>Join us as<br />we say <i>always.</i></h2>
+        <p>We would be delighted to celebrate this moment with the people who mean the most to us.</p>
+        <div className="placeholder-seal" aria-label="Placeholder insignia">I <i>&amp;</i> S</div>
+      </div>
+    </section>
 
-      <section className="people section" aria-label="The couple">
-        <article className="person-card bride-card">
-          <Image src="/images/bride.jpeg" alt="Imaya in the garden" fill sizes="(max-width: 720px) 100vw, 50vw" />
-          <div><p>The bride</p><h2>Imaya</h2></div>
-        </article>
-        <article className="person-card groom-card">
-          <Image src="/images/hero-embrace.jpeg" alt="Shehan with Imaya in the garden" fill sizes="(max-width: 720px) 100vw, 50vw" />
-          <div><p>The groom</p><h2>Shehan</h2></div>
-        </article>
-      </section>
+    <section className="day" id="the-day">
+      <div className="day-intro"><p className="day-date">Friday, 16 July 2027</p><h2>From 6:00 PM <i>onwards</i></h2></div>
+      <ol>
+        {event.timeline.map(([time, title, description]) => <li key={time}><time>{time}</time><div><h3>{title}</h3><p>{description}</p></div></li>)}
+      </ol>
+    </section>
 
-      <section className="venue section" id="venue">
-        <p className="eyebrow">Save the evening</p>
-        <h2>At <i>Cinnamon Life</i><br />at City of Dreams</h2>
-        <p className="venue-city">Colombo, Sri Lanka · 6:00 PM onwards</p>
-        <div className="venue-actions">
-          <a className="button button-solid" href={event.mapUrl} target="_blank" rel="noreferrer">Open in maps <span aria-hidden="true">↗</span></a>
-          <a className="button button-quiet" href={event.calendarUrl} target="_blank" rel="noreferrer">Add to calendar <span aria-hidden="true">↗</span></a>
-        </div>
-      </section>
+    <GallerySlider />
 
-      <section className="gallery section" aria-label="Garden details">
-        <div className="gallery-frame">
-          <Image src={gallery[activeSlide][0]} alt={gallery[activeSlide][1]} fill sizes="(max-width: 900px) 100vw, 72vw" />
-        </div>
-        <div className="gallery-controls" aria-label="Choose a photo">
-          {gallery.map(([, alt], index) => <button key={alt} className={index === activeSlide ? "active" : ""} type="button" onClick={() => setActiveSlide(index)} aria-label={`Show photo ${index + 1}`} aria-current={index === activeSlide}>{String(index + 1).padStart(2, "0")}</button>)}
-        </div>
-      </section>
+    <section className="venue" id="venue">
+      <div className="venue-copy"><p className="venue-name">Cinnamon Life at City of Dreams</p><h2>An evening in the <i>heart of Colombo.</i></h2><address>{event.city}</address><a className="text-link" href={event.mapUrl} target="_blank" rel="noreferrer">Open Google Maps</a></div>
+      <div className="map-frame"><iframe src={event.mapEmbedUrl} title="Map showing Cinnamon Life at City of Dreams in Colombo" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div>
+    </section>
 
-      <section className="schedule section" id="schedule">
-        <div className="section-heading"><p className="eyebrow">The evening</p><h2>From six <i>onwards</i></h2></div>
-        <ol>
-          {event.timeline.map(([time, title, description]) => <li key={time}><time>{time}</time><div><h3>{title}</h3><p>{description}</p></div><Mark>✦</Mark></li>)}
-        </ol>
-      </section>
+    <section className="rsvp" id="rsvp">
+      <div className="rsvp-heading"><h2>Your reply will mean <i>so much.</i></h2><p>RSVPs are not open yet. The form below will become available when the guest list is ready.</p></div>
+      <RsvpForm />
+    </section>
 
-      <section className="rsvp section" id="rsvp">
-        <div className="rsvp-photo"><Image src="/images/hero-flowers.jpeg" alt="Pink garden flowers" fill sizes="(max-width: 760px) 100vw, 42vw" /></div>
-        <div className="rsvp-copy">
-          <p className="eyebrow">Will you join us?</p>
-          <h2>RSVP</h2>
-          <p>We are preparing the guest list now. Please return here soon to send your response.</p>
-          {!rsvpOpen ? <button className="button button-solid" type="button" onClick={() => setRsvpOpen(true)}>Notify me when RSVPs open</button> : <p className="rsvp-notice" role="status">RSVP submissions are being prepared. We look forward to celebrating with you.</p>}
-        </div>
-      </section>
-
-      <footer>
-        <div className="footer-seal" aria-hidden="true">I <i>&amp;</i> S</div>
-        <p>{event.date} · {event.venue}</p>
-        <a href="#top">Back to top ↑</a>
-      </footer>
-    </main>
-  );
+    <footer><div className="monogram" aria-hidden="true">I <i>&amp;</i> S</div><p>Imaya Kehelkaduwa &amp; Shehan Aluwihare</p><p>{event.date}</p></footer>
+  </main>;
 }

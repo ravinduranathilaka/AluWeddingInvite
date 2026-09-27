@@ -5,8 +5,9 @@ export const event = {
   shortDate: "16 · 07 · 27",
   time: "6:00 PM onwards",
   venue: "Cinnamon Life at City of Dreams",
-  city: "Colombo, Sri Lanka",
-  mapUrl: "https://www.google.com/maps/search/?api=1&query=Cinnamon+Life+at+City+of+Dreams+Colombo",
+  city: "No. 01 Justice Akbar Mawatha, Colombo 00200, Sri Lanka",
+  mapUrl: "https://www.google.com/maps/search/?api=1&query=No.+01+Justice+Akbar+Mawatha,+Colombo+00200,+Sri+Lanka",
+  mapEmbedUrl: "https://www.google.com/maps?q=No.+01+Justice+Akbar+Mawatha,+Colombo+00200,+Sri+Lanka&output=embed",
   calendarUrl: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Imaya+%26+Shehan+Wedding&dates=20270716T180000%2F20270716T233000&ctz=Asia%2FColombo&details=Join+us+for+the+wedding+celebration.&location=Cinnamon+Life+at+City+of+Dreams%2C+Colombo%2C+Sri+Lanka",
   timeline: [
     ["6:00 PM", "Arrival", "Welcome drinks and garden moments"],
